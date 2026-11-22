@@ -1,0 +1,570 @@
+Vibe coding is when you describe what you want in plain English and an AI writes the code; agentic AI is when an AI system can plan, use tools, take actions, check results, and complete a multi-step task with limited supervision. Vibe coding is mainly a way of creating software; agentic AI is a broader way of getting work done.
+
+Vibe coding vs agentic AI
+Aspect	Vibe coding	Agentic AI
+Core idea	You prompt an AI to generate code	You give an AI a goal; it plans and executes steps
+Human role	You describe, review, and guide continuously	You set the goal, constraints, and review checkpoints
+AI role	Writes code from your prompt	Plans, calls tools, executes tasks, tests, and iterates
+Typical output	A code snippet, webpage, script, or prototype	A completed workflow, report, ticket update, or multi-step task
+Control	High human involvement	More autonomy, with human oversight
+Best for	Fast prototyping and exploration	Repeatable, multi-step business workflows
+For example, if you tell an AI, “Build me a simple expense-tracker web app,” and it writes the HTML, CSS, and JavaScript, that is vibe coding. If you tell an AI, “Find all unpaid invoices above ₹50,000, email the owners for approval, update the finance system, and create a summary report,” and it actually performs those steps using connected tools, that is agentic AI.
+
+Agentic AI in simple words
+An AI agent is like a capable assistant that does not merely answer questions—it can decide what to do next and use tools to do it.
+
+An agent usually has:
+
+A goal: “Prepare this month’s sustainability report.”
+
+Memory: It remembers the conversation and prior steps.
+
+Planning: It breaks the goal into smaller steps.
+
+Tools: It can search a database, read files, call APIs, send emails, or update records.
+
+Checking/iteration: It verifies whether the result is complete and corrects mistakes.
+
+Human approval: For sensitive actions, a person reviews before the agent acts.
+
+LangChain describes autonomous agents as combining tool calling, memory, and planning.
+
+Example: ESG report agent
+Imagine an Oren-style sustainability agent:
+
+User: “Prepare our Q3 BRSR-ready energy and emissions report for the Pune plant.”
+
+The agent may:
+
+Check which data is missing.
+
+Search the company’s utility-bill database.
+
+Extract electricity consumption from invoices.
+
+Ask the plant manager to approve uncertain values.
+
+Calculate emissions using the correct emission factor.
+
+Compare results with last quarter and flag unusual changes.
+
+Generate a draft report with source links.
+
+Send it to the sustainability lead for final approval.
+
+The key point: the agent is not just chatting. It is taking actions across systems, while keeping a human in the loop for approvals and exceptions.
+
+RAG pipeline
+RAG means Retrieval-Augmented Generation.
+
+A normal AI model answers from what it learned during training. RAG adds a step: before answering, the system first retrieves relevant documents or records from your company’s data, then gives those documents to the AI so its answer is based on them.
+
+Simple RAG flow
+User asks: “What was our Pune plant’s electricity consumption in Q3?”
+
+Retrieve: The system searches company documents, invoices, and databases for relevant information.
+
+Augment: It adds the retrieved passages to the AI’s prompt.
+
+Generate: The AI writes an answer using those documents.
+
+Cite: Ideally, the answer links to the exact invoice or source record.
+
+LangChain describes this as retrieving relevant data at query time and passing it to the model along with the user question.
+
+Example
+Without RAG:
+
+“Our Pune plant used approximately X kWh in Q3.”
+
+That answer may be invented or outdated.
+
+With RAG:
+
+“Your Pune plant used 1,24,500 kWh in Q3, based on three utility invoices dated July, August, and September. The total emissions were 87.15 tonnes CO2e.”
+
+The second answer is more useful because it is grounded in actual company data and can include sources. RAG helps reduce hallucination and makes answers specific to private company information.
+
+RAG vs a chatbot
+Feature	Normal chatbot	RAG chatbot
+Knowledge source	General training knowledge	Company documents, databases, policies
+Answer style	General	Specific and source-backed
+Risk	May invent facts	Lower hallucination risk, but retrieval quality still matters
+Example	“What is Scope 2?”	“What was our Scope 2 emissions last quarter?”
+LangChain
+LangChain is a toolkit/framework for building AI applications. Think of it as a set of ready-made building blocks for connecting an AI model to data, tools, prompts, memory, and workflows.
+
+Instead of writing every integration from scratch, a developer can use LangChain components to:
+
+Connect to an LLM, such as GPT or Claude
+
+Load and split documents
+
+Store and search documents in a vector database
+
+Create prompts
+
+Call external tools
+
+Build a RAG pipeline or an agent
+
+Example
+For an ESG assistant, LangChain could help connect:
+
+Company policy PDFs
+
+Utility invoices
+
+Supplier submissions
+
+A vector database for semantic search
+
+A calculator for emissions
+
+A reporting generator
+
+So, if a user asks, “Which suppliers have missing emissions data?” LangChain can help the application retrieve the right supplier records and generate an answer.
+
+In one line: LangChain is the construction kit for building LLM applications.
+
+LangGraph
+LangGraph is a framework for building AI workflows as a graph of steps, decisions, loops, and states.
+
+Think of it as a flowchart that an AI application can follow:
+
+text
+User question
+      |
+      v
+Understand request
+      |
+      +--> Need company data? --> Retrieve data --> Answer
+      |
+      +--> Need calculation? --> Calculate emissions --> Answer
+      |
+      +--> Data missing? --> Ask user/supplier --> Wait --> Continue
+LangGraph is useful when a task is not a simple one-shot question. It lets the system branch, retry, wait for human input, remember progress, and continue later. LangChain’s documentation specifically describes agentic RAG built with LangGraph, where the model decides whether to retrieve data or answer directly.
+
+Example
+For an ESG reporting agent:
+
+If all data is available, generate the report.
+
+If a supplier has not submitted data, send a reminder.
+
+If a value looks abnormal, route it to a human reviewer.
+
+If the reviewer approves, continue report generation.
+
+If the reviewer rejects it, ask for clarification and repeat.
+
+That conditional, multi-step workflow is exactly what LangGraph is designed to manage.
+
+In one line: LangChain gives you the parts; LangGraph helps you arrange those parts into a reliable workflow.
+
+MCP
+MCP means Model Context Protocol. It is an open standard that lets AI applications connect securely to external systems—such as files, databases, tools, and business workflows.
+
+Think of MCP as a universal adapter between an AI assistant and the software systems it needs to use.
+
+Without MCP, every AI product may need a custom integration for every tool. With MCP, a system can expose standard “tools” and “data sources” that an AI application can discover and use.
+
+Example
+Suppose Oren builds an MCP server for its ESG platform. An AI assistant could then ask:
+
+“Show me all suppliers with overdue Scope 3 data.”
+
+Using MCP, the assistant can connect to Oren’s supplier database, retrieve the relevant records, and display them—without the user manually exporting a spreadsheet.
+
+MCP could also connect an AI assistant to:
+
+A company’s HR system, to retrieve employee training or safety data
+
+A finance system, to retrieve energy or travel expenses
+
+A document store, to retrieve sustainability policies
+
+A ticketing system, to create follow-up tasks
+
+A messaging system, to notify a plant manager
+
+MCP’s official documentation describes it as a standard for connecting AI applications to data sources, tools, and workflows.
+
+In one line: MCP is the standard plug/socket that lets an AI agent safely connect to external business systems.
+
+How they fit together
+For an enterprise ESG product, the pieces could work like this:
+
+Technology	Role	ESG example
+LLM	Understands language and generates text	Explains why an emissions number changed
+RAG	Finds relevant company knowledge	Retrieves the correct utility invoices and policies
+LangChain	Provides building blocks	Connects the model, documents, database, and tools
+LangGraph	Manages the workflow	Handles missing data, approvals, retries, and report generation
+MCP	Connects to external systems	Lets the agent access ERP, HR, finance, supplier, and document systems
+Agent	Coordinates everything	Prepares a draft report and asks a human for approval
+Important product caveat
+For an ESG product, an agent should not be allowed to silently change compliance-critical numbers. The better design is:
+
+AI extracts and suggests data.
+
+The system validates it against rules.
+
+A human reviews uncertain values.
+
+Every accepted value retains a source and audit trail.
+
+Only approved data enters the final report.
+
+That is especially important because Oren’s value proposition is not just automation—it is trustworthy, traceable, and assurance-ready sustainability reporting.
+
+Interview-ready explanation
+If Anshul asks, “What do you understand by agentic AI and RAG?” say:
+
+“RAG makes an AI answer specific questions by first retrieving relevant company data and then generating an answer grounded in that data. An agentic AI goes further: it can plan a multi-step task, decide which tools to use, retrieve or update data, handle exceptions, and seek human approval where needed. For an ESG platform, I would use RAG for answering questions from policies and reports, while an agent could manage the end-to-end reporting workflow—provided every compliance-critical value remains traceable and human-reviewable.”
+
+That shows both technical understanding and the product judgement that matters for Oren.
+
+Please can you do a research on the web and let me know valuable information only form this PM assessment point of view?
+
+
+Yes. For this assessment, the most valuable research is not “learn everything about climate change.” It is to understand what makes cement plants vulnerable, which risks Meera can defend in a board meeting, and what data you can realistically show in v1.
+
+The single most important insight
+Your prototype should not simply say, “This plant has high climate risk.”
+
+It should say:
+
+“This plant has high climate exposure because it faces a specific hazard, depends on a critical input such as water or clinker, and has limited ability to absorb the impact.”
+
+That is the difference between a generic dashboard and a useful product.
+
+For Nimbus, exposure has three parts:
+
+Climate Exposure
+=
+Hazard
+×
+Operational Dependency
+×
+Financial / Strategic Materiality
+Climate Exposure=Hazard×Operational Dependency×Financial / Strategic Materiality
+Example: a plant may face high heat, but if it has a small capacity and low asset value, it may not be the top priority. Conversely, a plant with moderate heat risk but high output, high emissions, and a captive coal plant may be a major priority.
+
+Physical risk: what matters for cement
+Cement is a resource-intensive industry, so the most relevant physical risks are water stress, extreme heat, and extreme precipitation/flooding. Industry climate-risk disclosures specifically identify these as material risks for cement companies.
+
+Physical hazard	Why it matters to Nimbus	What to show in v1
+Extreme heat	Worker safety, equipment cooling, productivity, and potential output disruption	Historical and projected hot days; compare 2026 with 2040
+Water stress / drought	Cement production, dust suppression, cooling, and community relations depend on water	Water-stress rating, rainfall pattern, water-source dependence
+Flood / extreme rain	Can disrupt site access, logistics, raw materials, and clinker movement	River-discharge indicator, flood-risk category, coastal exposure
+Cyclones	Particularly relevant for coastal plants	Coastal flag, location context, disruption exposure
+Gradual climate change	Long-term operating conditions may become less favourable	2040 trend rather than a single exact prediction
+Physical risks can be acute—such as floods, storms, and heatwaves—or chronic, such as long-term temperature and rainfall changes.
+
+Water is a major product angle
+Do not treat water as just another chart. For Nimbus, water is an operational dependency.
+
+The plant file tells you which plants use groundwater, reservoirs, rivers, canals, municipal supply, or desalinated seawater. That matters because:
+
+Groundwater-dependent plants may face depletion, regulatory restrictions, or community conflict.
+
+River/canal-dependent plants may face low flow, pollution, or allocation restrictions.
+
+Coastal plants using desalinated seawater may be less water-stressed but more exposed to coastal hazards.
+
+Municipal-supply plants may face supply reliability and cost risk.
+
+WRI Aqueduct’s baseline water-stress indicator measures water withdrawals relative to available water; higher values mean more competition for water. Its drought-risk indicator estimates the likelihood that drought will affect people and infrastructure.
+
+Product implication: Give Meera a “water dependency” view, not only a generic water-risk score.
+
+Transition risk: what matters for cement
+For cement, transition risk is mainly about emissions intensity, carbon costs, coal dependence, and decarbonisation investment.
+
+India’s Carbon Credit Trading Scheme has notified emissions-intensity targets for cement. ICAP reports an average reduction target of 2.7% by 2027 for integrated cement, based on FY2024 baseline data, with legally binding targets for FY2026 and FY2027.
+
+That means your transition-risk view should not be vague. It should show:
+
+Transition factor	Why it matters	What to show
+Scope 1 CO2	Direct emissions create carbon-cost exposure	Emissions per plant, emissions per tonne of output
+Emissions intensity	A plant may be large but efficient, or small but inefficient	CO2 per tonne of cement / clinker
+Carbon-price sensitivity	Shows what happens if carbon becomes costly	Slider: ₹500, ₹1,000, ₹2,000, ₹5,000 per tonne CO2
+CCTS exposure	Shows regulatory pressure	Current intensity versus sector target direction
+Coal dependence	Captive coal power increases transition exposure	Flag P01’s 40 MW captive coal plant
+Asset age	Older kilns may need more investment	Flag P05’s 1998 kiln
+Decarbonisation readiness	Shows available mitigation options	Waste-heat recovery, alternative fuels, renewable electricity, clinker substitution
+Cement decarbonisation levers
+Use these as the “recommended actions” in your prototype. They make your product feel industry-aware rather than generic.
+
+The main cement decarbonisation levers are:
+
+Reduce clinker intensity: Use supplementary cementitious materials such as fly ash, slag, and calcined clay to replace part of the clinker in cement.
+
+Use alternative fuels: Replace some fossil fuels with waste-derived or biomass-based fuels.
+
+Improve energy efficiency: Reduce thermal and electrical energy use.
+
+Decarbonise electricity: Use renewable electricity and waste-heat recovery.
+
+Deploy carbon capture: A longer-term option for unavoidable process emissions.
+
+NITI Aayog estimates that green alternative fuels can reduce cement-sector emissions by 6–13%, while renewable electricity integration and waste-heat recovery can contribute another 6–10%.
+
+Apply this to Nimbus
+Plant observation	Relevant action	Why it matters
+P01 has a 40 MW captive coal power plant	Coal-to-renewables transition plan	Reduces Scope 1 and transition exposure
+P03 has a 30 MW waste-heat recovery system	Highlight as a transition-risk mitigant	Already using a decarbonisation lever
+P05 has the oldest kiln, from 1998	Energy-efficiency and modernisation review	Older assets may have higher emissions intensity and upgrade needs
+P06 is the newest kiln, from 2022	Lower immediate modernisation priority	Newer asset, but still high clinker production
+P08 uses fly ash from nearby power plants	Highlight clinker-substitution opportunity	Reduces clinker intensity and emissions
+P09 uses steel slag	Highlight slag-based cement opportunity	Uses industrial by-products and can reduce clinker demand
+This is a strong product insight: P08 and P09 are not just low-emission grinding units; they may also be part of Nimbus’s decarbonisation strategy because they use industrial by-products.
+
+Clinker logistics is a hidden risk
+This is one of the best ways to stand out.
+
+P01 ships clinker to P07 by rail. P06 ships clinker to P08 and P09. That means P07, P08, and P09 depend on upstream plants and transport routes.
+
+So your prototype should show a dependency chain:
+
+text
+P01 Chittorgarh ──rail──> P07 Mundra
+P06 Baloda Bazar ──> P08 Paradip
+P06 Baloda Bazar ──> P09 Durgapur
+If a flood, heatwave, rail disruption, or water shortage affects P01 or P06, it can affect the grinding units downstream.
+
+This makes your product more realistic than a simple map of “plant risk.” It shows that climate risk can propagate through operations.
+
+Which plants should stand out?
+Based on the supplied data, these are likely to be the most interesting plants for your v1.
+
+Plant	Why it should stand out	Likely v1 insight
+P01 Chittorgarh	Highest emissions, captive coal power, clinker exporter, groundwater use	Highest transition-risk priority
+P05 Ariyalur	Oldest kiln, groundwater use, Tamil Nadu location	High physical and modernisation priority
+P06 Baloda Bazar	Newest kiln, high clinker production, supplies P08 and P09	Operationally important; disruption could cascade
+P07 Mundra	Coastal, uses desalinated seawater, receives clinker by rail	Coastal/logistics risk, low direct emissions
+P08 Paradip	Coastal, receives clinker from P06, uses fly ash	Coastal/logistics risk and decarbonisation opportunity
+P09 Durgapur	River-dependent, receives clinker from P06, uses steel slag	Flood/water exposure and by-product opportunity
+Do not pre-decide the final ranking without calculating the indicators. But these are the plants where your analysis should look for a story.
+
+Data sources: use them correctly
+Open-Meteo Climate API
+Use this for future climate projections to 2040.
+
+It provides daily climate data from downscaled CMIP6 models, covering 1950 to 2050, with temperature, precipitation, and other variables.
+
+Useful variables:
+
+Daily maximum temperature
+
+Daily mean temperature
+
+Daily precipitation
+
+Soil moisture, where relevant
+
+Open-Meteo provides temperature, precipitation, and soil-moisture variables in its APIs.
+
+How to use it:
+
+For each plant’s latitude and longitude, fetch historical and future climate data.
+
+Calculate annual days above 35°C and 40°C.
+
+Compare a recent baseline period with 2040.
+
+Show a range across available models, not one false precise number.
+
+Open-Meteo Flood API
+Use this for river-discharge-based flood exposure.
+
+It returns daily river discharge for the largest river within a 5 km area of a given coordinate, from 1984 through a seven-month forecast.
+
+Important limitation: River discharge is not the same as “this factory will flood.” It is a proxy for hydrological stress or flood potential. Label it clearly as such.
+
+WRI Aqueduct
+Use this for water stress, drought, and flood-risk context.
+
+Aqueduct 4.0 provides water-risk indicators, including baseline water stress and drought risk.
+
+How to use it:
+
+Add a water-stress category to each plant.
+
+Combine it with the plant’s actual water source.
+
+Flag groundwater-dependent plants separately because Aqueduct’s drought indicator focuses on surface water, not necessarily groundwater availability.
+
+NASA POWER
+Use this for historical weather validation.
+
+It is useful to show that your climate projections are grounded in observed historical conditions. NASA POWER provides historical daily weather data by location.
+
+NGFS / World Bank carbon pricing
+Use these for transition-risk scenarios.
+
+Do not claim to know India’s future carbon price. Instead, let Meera choose an assumption:
+
+₹500 per tonne CO2
+
+₹1,000 per tonne CO2
+
+₹2,000 per tonne CO2
+
+₹5,000 per tonne CO2
+
+Then show the resulting exposure range. This is more credible than one made-up forecast.
+
+A strong v1 scoring model
+Use a simple, transparent model. Do not make it overly complex.
+
+Physical-risk score
+Physical Risk
+=
+0.35
+×
+Heat
++
+0.30
+×
+Water Stress
++
+0.25
+×
+Flood
++
+0.10
+×
+Coastal/Cyclone
+Physical Risk=0.35×Heat+0.30×Water Stress+0.25×Flood+0.10×Coastal/Cyclone
+Transition-risk score
+Transition Risk
+=
+0.35
+×
+Emissions Intensity
++
+0.25
+×
+Carbon-Cost Exposure
++
+0.20
+×
+CCTS Gap
++
+0.10
+×
+Coal Dependence
++
+0.10
+×
+Asset Age
+Transition Risk=0.35×Emissions Intensity+0.25×Carbon-Cost Exposure+0.20×CCTS Gap+0.10×Coal Dependence+0.10×Asset Age
+Overall exposure
+Overall Exposure
+=
+0.55
+×
+Physical Risk
++
+0.45
+×
+Transition Risk
+Overall Exposure=0.55×Physical Risk+0.45×Transition Risk
+You can change the weights, but you must explain them.
+
+For example:
+
+“I weighted heat and water more heavily than coastal risk because Nimbus’s plants are mostly inland and water is an operational dependency for cement production. I weighted emissions intensity heavily in transition risk because it is directly linked to carbon-cost exposure and India’s CCTS targets.”
+
+What to show on each plant page
+For each plant, show:
+
+Operational profile: Capacity, output, clinker, emissions, asset value, revenue, employees.
+
+Physical-risk breakdown: Heat, water, flood, coastal/cyclone.
+
+Transition-risk breakdown: Emissions intensity, carbon-cost sensitivity, CCTS gap, coal dependence, asset age.
+
+2040 outlook: Change in selected indicators, with a range.
+
+Dependencies: Water source, clinker shipments, rail/transport dependence.
+
+Mitigation opportunities: Waste-heat recovery, alternative fuels, renewables, clinker substitution, water resilience.
+
+Data confidence: Real data, modelled projection, assumption, or illustrative estimate.
+
+What Meera should be able to do
+Meera should be able to answer:
+
+“Which plants need attention first?”
+
+“Why does this plant rank high?”
+
+“What could happen by 2040?”
+
+“How much could carbon pricing cost us?”
+
+“Which risks affect production, cost, compliance, or reputation?”
+
+“What should we do first?”
+
+“What data is real, what is modelled, and what is assumed?”
+
+That last point is critical. Oren’s assignment says made-up numbers must be labelled, and it values evidence and honest assumptions.
+
+What to cut
+Cutting well is a major scoring criterion.
+
+Cut	Reason
+Detailed flood-inundation modelling	No site elevation, drainage, or asset-footprint data
+Insurance pricing	Requires policy, claims, and asset-vulnerability data
+Scope 3 supplier emissions	No supplier-level data provided
+Real-time disaster alerts	Not needed for a strategic board-level exposure view
+Full financial-loss modelling	Requires engineering vulnerability and business-interruption data
+Carbon-capture project planning	Too long-term and capital-intensive for v1
+Multi-company benchmarking	Does not solve Meera’s immediate Nimbus question
+The best product story
+Your v1 story can be:
+
+“Meera does not need another climate-risk report. She needs to know which plants could disrupt production, increase costs, or create compliance exposure by 2040—and what Nimbus should do first. This prototype combines location-based physical hazards with plant-specific dependencies and transition exposure. It distinguishes real operational data from climate projections and clearly labels assumptions, so Meera can use it confidently in front of the board.”
+
+What will impress Anshul
+Anshul will likely value:
+
+A sharp scope, not a feature-heavy dashboard.
+
+A clear explanation of why you cut features.
+
+Real use of Open-Meteo, Aqueduct, and carbon-price scenarios.
+
+Recognition that water, heat, clinker logistics, and coal dependence matter for cement.
+
+A transparent scoring method, not a black-box score.
+
+Clear separation between fact, model, and assumption.
+
+A developer ticket that is specific enough to build.
+
+A prototype that Meera could realistically show to a board.
+
+Your strongest differentiation
+Most candidates may build a generic climate-risk map.
+
+You can differentiate by showing that you understand cement operations:
+
+Clinker is produced at integrated plants and shipped to grinding units.
+
+P01 and P06 are upstream dependencies for P07, P08, and P09.
+
+Water source matters differently by plant.
+
+Captive coal power makes P01 a transition-risk hotspot.
+
+P03 already has waste-heat recovery, so it should not be treated like every other plant.
+
+P08 and P09 use industrial by-products, which connects them to decarbonisation opportunities.
+
+Asset age matters: P05’s 1998 kiln is different from P06’s 2022 kiln.
+
+That operational understanding is exactly what makes this a Product Manager assessment rather than a data-science assignment.

@@ -1,0 +1,6 @@
+{
+  "name": "Nimbus Climate — ESG Exposure Intelligence",
+  "description": "Board-ready physical and transition climate risk exposure dashboard for Nimbus Cement Ltd (FY 2025–26 to 2040), powered by Open-Meteo CMIP6 & GloFAS APIs, WRI Aqueduct 4.0 water stress baselines, and India CCTS carbon pricing scenarios.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
